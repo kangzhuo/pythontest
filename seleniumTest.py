@@ -1,4 +1,5 @@
 # -*- coding: gbk -*-
+# 刷淘宝页面
 import os
 import sys
 from selenium import webdriver

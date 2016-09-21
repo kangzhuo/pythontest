@@ -1,4 +1,5 @@
 #encoding=utf8
+# 代理文件proxy内容验证，暂时未用
 import urllib
 import socket
 socket.setdefaulttimeout(3)

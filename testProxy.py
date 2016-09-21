@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 # nohup python pyScnPort.py > 1.log 2>&1 &
-
+# 测试代理
 from threading import Thread, activeCount
 import socket
 import urllib

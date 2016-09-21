@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-
+# 爬代理
 from threading import Thread, activeCount
 import socket
 import urllib
