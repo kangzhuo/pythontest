@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
-print 'hello world','fsdf','sfdsa'
-name = raw_print()
-print name
+i = raw_input('input a number : ')
+i = int(i)
+while i < 0 or i > 100 :
+    print('input error')
+    i = raw_input('input a number : ')
