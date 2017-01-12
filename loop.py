@@ -91,8 +91,9 @@ def intodb(m):
 
 
     ordNo = '' + request
-    ordNo.replace('/llg/','')
-    ordNo.replace('.mms','')
+    ordNo = ordNo.replace('\/llg\/llg','')
+    ordNo = ordNo.replace('\/l\/lg','')
+    ordNo = ordNo.replace('.mms','')
     url = 'http://notify.liulianggo.com/feinengkami/notify?ordNo='+ordNo+'&status=success'
     result = urllib2.urlopen(url).read()
     i = 1
