@@ -16,6 +16,8 @@ import json
 #iMaxTime = 0
 #iAllTime = 0
 
+global iFail, iSucc, iOther
+
 mutex = threading.Lock()
 
 logging.basicConfig(level=logging.DEBUG,
@@ -26,21 +28,31 @@ logging.basicConfig(level=logging.DEBUG,
 
 # 测试ip和端口是否开放
 def test_http(smsId, status, mobile, sendTime):
-    url = 'http://121.41.36.93:8191/callback/test.php'
+    global iFail, iSucc, iOther
+
+    url = 'http://121.41.36.93:8191/callback/hs.php'
 
     #m2 = hashlib.md5()
     #m2.update(appKey + appId + mobile) #key + app_id + tel
     #sign = m2.hexdigest()
-    data = [{"smsId":smsId, "status":status, "mobile":mobile, "sendTime":sendTime}]
+    data = {"Dest_Id":"1", "Msg_Id":smsId, "Status":status, "Mobile":mobile, "sendTime":sendTime}
     in_json = json.dumps(data)
 
     #global mutex, iAll, iSuccess, iFail, iExcpt, iMaxTime, iAllTime
     try:
         #logging.debug(getUrl)
-        logging.info('req:' + url)
+        print 'req:' + url
+        logging.info('req:' + url + '|' + in_json)
         req = urllib2.Request(url, in_json)
         res = urllib2.urlopen(req).read()
         logging.info('resp:' + res)
+        if 'FAIL' in res:
+            iFail += 1
+        elif 'SUCCESS' in res:
+            iSucc += 1
+        else:
+            iOther += 1
+
         #start = int(round(time.time() * 1000))
         #res = urllib2.urlopen(req).read()
         #end = int(round(time.time() * 1000))
@@ -65,18 +77,31 @@ def test_http(smsId, status, mobile, sendTime):
         pass
 
 if __name__=='__main__':
-    smsId = ''
-    status = '2'
-    mobile = '18858100583'
-    sendTime = ''
-    if len(sys.argv[1]) > 0:
-        smsId = sys.argv[1]
-    if len(sys.argv[2]) > 0:
-        status = sys.argv[2]
-    if len(sys.argv[3]) > 0:
-        mobile = sys.argv[3]
 
-    test_http (smsId, status, mobile, sendTime)
+    global iFail, iSucc, iOther
+
+    iFail = 0
+    iSucc = 0
+    iOther = 0
+
+    file_object = open('kk')
+    try:
+        lines = file_object.readlines()
+        for line in lines:
+            sendTime = line[0:19]
+            smsId = line[line.index('backOrder=')+10:line.index(',reportCode')]
+            status = line[line.index('reportCode=')+11:line.index(',mobile')]
+            mobile = line[line.index('mobile=')+7:line.index('mobile=')+18]
+
+            print line
+            print 'sendTime:' + sendTime + 'smsId:' + smsId + 'status:' + status + 'mobile:' + mobile
+
+            test_http (smsId, status, mobile, sendTime)
+    finally:
+        file_object.close()
+        print iFail
+        print iSucc
+        print iOther
 
 #    while i < sys.argv[1]:
 #        while threading.activeCount() > 4000:

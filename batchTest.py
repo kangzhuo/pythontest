@@ -25,7 +25,8 @@ logging.basicConfig(level=logging.DEBUG,
 
 # 测试ip和端口是否开放
 def test_http(appId, appKey, modeId, mobile, vars):
-    url = 'http://notify_v2.llqianbao.com/callback/test.php'
+    # url = 'http://sms.smspaas.com/mt.php'
+    url = 'http://115.238.54.178:8091/mt.php'
 
     m2 = hashlib.md5()
     m2.update(appKey + appId + mobile) #key + app_id + tel
@@ -66,21 +67,9 @@ def test_http(appId, appKey, modeId, mobile, vars):
         pass
 
 if __name__=='__main__':
-    i = 0
-    while i < sys.argv[1]:
-        while threading.activeCount() > 4000:
-            i = i
-        # test_http('17','e341bacf6d','111168','18858100583','')
-        tel = '1885810058' + str(i)
-        threading.Thread(target = test_http, args = ('17','e341bacf6d','111168',tel,'')).start()
-        i = i + 1
 
-    while True:
-        logging.debug('当前活跃线程数:' + str(threading.activeCount()))
-        if threading.activeCount() < 2:
-            break
-        time.sleep(1)
-    logging.debug('执行完毕, 总数量:' + str(iAll) + ', 成功数量:' + str(iSuccess) + ", 失败数量:" + str(iFail) + ", 异常数量:" + str(iExcpt))
-    logging.debug('最大耗时:' + str(iMaxTime) + ', 平均耗时:' + str(float(iAllTime)/float(i+1)))
+    tel = '18858100583'
+    threading.Thread(target = test_http, args = ('17','bd2b5922d3','1154',tel,'')).start()
+
     input('Finished scanning.')
     sys.exit(0)
