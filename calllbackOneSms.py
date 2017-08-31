@@ -8,6 +8,7 @@ import urllib2
 import hashlib
 import sys
 import json
+from sys import argv
 
 #iAll = 0
 #iSuccess = 0
@@ -15,6 +16,7 @@ import json
 #iExcpt = 0
 #iMaxTime = 0
 #iAllTime = 0
+
 
 global iFail, iSucc, iOther
 
@@ -30,13 +32,13 @@ logging.basicConfig(level=logging.DEBUG,
 def test_http(smsId, status, mobile, sendTime):
     global iFail, iSucc, iOther
 
-    url = 'http://121.41.36.93:8191/callback/kx.php'
+    url = 'http://172.16.1.20:8191/callback/kx.php'
 
     #m2 = hashlib.md5()
     #m2.update(appKey + appId + mobile) #key + app_id + tel
     #sign = m2.hexdigest()
     #data = {"Dest_Id":"1", "Msg_Id":smsId, "Status":status, "Mobile":mobile, "sendTime":sendTime}
-    data = [{"time":"20170320104500","taskid":"0320104001100000163819","code":"DELIVRD","msg":"提交成功","mobile":mobile}]
+    data = [{"time":sendTime,"taskid":smsId,"code":status,"msg":"提交成功","mobile":mobile}]
     in_json = json.dumps(data)
 
     #global mutex, iAll, iSuccess, iFail, iExcpt, iMaxTime, iAllTime
@@ -85,21 +87,15 @@ if __name__=='__main__':
     iSucc = 0
     iOther = 0
 
-    file_object = open('kk')
     try:
-        lines = file_object.readlines()
-        for line in lines:
-            sendTime = line[0:19]
-            smsId = line[line.index('backOrder=')+10:line.index(',reportCode')]
-            status = line[line.index('reportCode=')+11:line.index(',mobile')]
-            mobile = line[line.index('mobile=')+7:line.index('mobile=')+18]
+        sendTime = '20170320104500'
+        smsId = argv[1]
+        status = argv[2]
+        mobile = argv[3]
+        print 'sendTime:' + sendTime + 'smsId:' + smsId + 'status:' + status + 'mobile:' + mobile
 
-            print line
-            print 'sendTime:' + sendTime + 'smsId:' + smsId + 'status:' + status + 'mobile:' + mobile
-
-            test_http (smsId, status, mobile, sendTime)
+        test_http (smsId, status, mobile, sendTime)
     finally:
-        file_object.close()
         print iFail
         print iSucc
         print iOther

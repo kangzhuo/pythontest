@@ -7,6 +7,7 @@ import urllib
 import urllib2
 import hashlib
 import sys
+from sys import argv
 
 iAll = 0
 iSuccess = 0
@@ -23,10 +24,15 @@ logging.basicConfig(level=logging.DEBUG,
                     filename='batch.log',
                     filemode='w')
 
+bills = ['18856092827']
+
 # 测试ip和端口是否开放
 def test_http(appId, appKey, modeId, mobile, vars):
     # url = 'http://sms.smspaas.com/mt.php'
-    url = 'http://115.238.54.178:8091/mt.php'
+    url = 'http://121.40.207.234:8091/mt.php'
+
+    print argv[1]
+    cnt = int(argv[1])
 
     m2 = hashlib.md5()
     m2.update(appKey + appId + mobile) #key + app_id + tel
@@ -37,27 +43,30 @@ def test_http(appId, appKey, modeId, mobile, vars):
     getUrl = url + '?appId=' + appId + '&modeId=' + modeId + '&vars=' + vars + '&mobile=' + mobile + '&sign=' + sign
     global mutex, iAll, iSuccess, iFail, iExcpt, iMaxTime, iAllTime
     try:
-        logging.debug(getUrl)
-        req = urllib2.Request(getUrl, '')
-        start = int(round(time.time() * 1000))
-        res = urllib2.urlopen(req).read()
-        end = int(round(time.time() * 1000))
-        after = end - start
-        logging.debug('运行时间:' + str(after) + "-结果:" + res)
-        if '\"code\":0,' in res:
-            if mutex.acquire():
-                iAll += 1
-                iSuccess += 1
-                if iMaxTime < after:
-                    iMaxTime = after
-                iAllTime += after
-            mutex.release()
-        else:
-            if mutex.acquire():
-                iAll += 1
-                iFail += 1
-                iAllTime += after
-            mutex.release()
+        for i in range(cnt):
+            logging.debug(getUrl)
+            req = urllib2.Request(getUrl, '')
+            start = int(round(time.time() * 1000))
+            res = urllib2.urlopen(req).read()
+            end = int(round(time.time() * 1000))
+            if (i / 100) == 0:
+                time.sleep(0.5)
+            after = end - start
+            logging.debug('运行时间:' + str(after) + "-结果:" + res)
+            if '\"code\":0,' in res:
+                if mutex.acquire():
+                    iAll += 1
+                    iSuccess += 1
+                    if iMaxTime < after:
+                        iMaxTime = after
+                    iAllTime += after
+                mutex.release()
+            else:
+                if mutex.acquire():
+                    iAll += 1
+                    iFail += 1
+                    iAllTime += after
+                mutex.release()
     except Exception,ex:
         logging.error('Exception%s:%s\n'%(Exception,ex))
         if mutex.acquire():
@@ -68,8 +77,12 @@ def test_http(appId, appKey, modeId, mobile, vars):
 
 if __name__=='__main__':
 
-    tel = '18858100583'
-    threading.Thread(target = test_http, args = ('17','bd2b5922d3','1154',tel,'')).start()
+    for tel in bills:
+        # threading.Thread(target = test_http, args = ('17','bd2b5922d3','1153',tel,'')).start()
+    threading.Thread(target = test_http, args = ('107','d57e0fb4c0','200062',tel,'')).start()
 
     input('Finished scanning.')
     sys.exit(0)
+
+
+
