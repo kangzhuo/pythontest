@@ -26,9 +26,9 @@ def test_http(appId, appKey, modeId, mobile):
 
     # values = {'appId':appId, 'modeId':modeId, 'vars':vars, 'mobile':mobile, 'sign':sign}
 
-    param = {'appId':appId,'modeId':modeId,'vars':'地方','mobile':mobile,'sign':sign}
+    param = {'appId':appId,'modeId':modeId,'vars':'地方[http://www.baidu.com]','mobile':mobile,'sign':sign}
     param = urllib.urlencode(param)
-    print param
+    print url + '?' + param
     getUrl = url + '?appId=' + appId + '&modeId=' + modeId + '&vars=' + '&mobile=' + mobile + '&sign=' + sign
     try:
         req = urllib2.Request(url, param)
@@ -40,7 +40,8 @@ def test_http(appId, appKey, modeId, mobile):
 
 if __name__=='__main__':
     for tel in tels:
-        test_http('17', 'c5f4abbb64', '201488', '18858100583') #appid appkey modeid tel
+        # test_http('17', 'c5f4abbb64', '205546', '18858100583')
+        test_http('10198', '3764daa1e6', '200816', '13588143705') #appid appkey modeid tel 13605808369 13505715513 18405815660
     time.sleep(15)
     input('Finished scanning.')
     sys.exit(0)

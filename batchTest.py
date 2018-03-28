@@ -29,7 +29,7 @@ bills = ['18856092827']
 # 测试ip和端口是否开放
 def test_http(appId, appKey, modeId, mobile, vars):
     # url = 'http://sms.smspaas.com/mt.php'
-    url = 'http://121.40.207.234:8091/mt.php'
+    url = 'http://sms.liulianggo.com/mt.php'
 
     print argv[1]
     cnt = int(argv[1])
@@ -79,7 +79,7 @@ if __name__=='__main__':
 
     for tel in bills:
         # threading.Thread(target = test_http, args = ('17','bd2b5922d3','1153',tel,'')).start()
-    threading.Thread(target = test_http, args = ('107','d57e0fb4c0','200062',tel,'')).start()
+        threading.Thread(target = test_http, args = ('107','d57e0fb4c0','200062',tel,'')).start()
 
     input('Finished scanning.')
     sys.exit(0)

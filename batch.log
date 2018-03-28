@@ -1,2 +1,1 @@
-Wed, 30 Aug 2017 16:24:27 sendSms.py[line:38] ERROR Exception<type 'exceptions.Exception'>:<urlopen error [Errno 8] nodename nor servname provided, or not known>
-
+Mon, 26 Mar 2018 17:53:41 ydqnsendSms.py[line:36] DEBUG 结果:{"code":0,"msg":"业务校验成功","rets":[{"sendId":"152205802116102701","respCode":0,"mobile":"13588143705"}]}
